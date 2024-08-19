@@ -1,0 +1,81 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+ <Frame name="Relic_24" virtual="true"><Size x="24" y="24"/></Frame>
+ <Button name="Relic_HiButtonTemplate" virtual="true">
+  <Size x="20" y="20"/>
+  <Layers><Layer level="BACKGROUND"><Texture name="$parentTex"/></Layer></Layers>
+  <NormalTexture/>
+  <HighlightTexture alphaMode="ADD" file="Interface\Buttons\ButtonHilight-Square"/>
+  <PushedTexture alphaMode="ADD" file="Interface\Buttons\CheckButtonHilight"/>
+  <Scripts>
+   <OnEnter>
+	GameTooltip:SetOwner(self, "ANCHOR_NONE");
+	GameTooltip:SetPoint("TOP",self,"BOTTOM",0,0);
+	GameTooltip:AddLine(self.toolHeader or "",1,1,1);
+	GameTooltip:AddLine(self.toolText or "",nil,nil,nil,1);
+	GameTooltip:Show();
+   </OnEnter>
+   <OnLeave>GameTooltip:Hide();</OnLeave>
+  </Scripts>
+ </Button>
+
+
+ <Frame name="Relic_View" movable="true" clampToScreen="true" hidden="true">
+  <Size x="185" y="85"/>
+  <Anchors><Anchor point="CENTER"/></Anchors>
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+   <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4" /></BackgroundInsets>
+   <TileSize><AbsValue val="16" /></TileSize>
+   <EdgeSize><AbsValue val="16" /></EdgeSize>
+  </Backdrop>
+  <Layers>
+   <Layer level="OVERLAY">
+    <FontString name="$parentCaption" inherits="GameFontHighlightLarge">
+     <Anchors><Anchor point="TOPLEFT"><Offset x="7" y="-8"/></Anchor></Anchors>
+    </FontString>
+   </Layer>
+  </Layers>
+  <Frames>
+   <Button name="$parentCloseButton"> 
+    <Size><AbsDimension x="32" y="32"/></Size>
+    <Anchors><Anchor point="TOPRIGHT"><Offset><AbsDimension x="1" y="0"/></Offset></Anchor></Anchors>
+    <Scripts><OnClick>self:GetParent():Hide();</OnClick></Scripts>
+    <NormalTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Up"/>
+    <PushedTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Down"/>
+    <HighlightTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD"/>
+   </Button>
+   <Button name="$parent_Replay1" inherits="Relic_HiButtonTemplate" hidden="true" id="1">
+    <Anchors><Anchor point="TOPLEFT"><Offset x="6" y="-31"/></Anchor></Anchors>
+   </Button>
+   <Button name="$parent_Set1" inherits="Relic_HiButtonTemplate,Relic_24" id="1">
+    <Anchors><Anchor point="TOPRIGHT"><Offset x="-6" y="-55"/></Anchor></Anchors>
+   </Button>
+   <Button name="$parent_Set2" inherits="Relic_HiButtonTemplate,Relic_24" id="2">
+    <Anchors><Anchor point="TOPRIGHT"><Offset x="-32" y="-55"/></Anchor></Anchors>
+   </Button>
+   <Button name="$parent_Set3" inherits="Relic_HiButtonTemplate,Relic_24" id="3">
+    <Anchors><Anchor point="TOPRIGHT"><Offset x="-32" y="-29"/></Anchor></Anchors>
+   </Button>
+   <Button name="$parent_Set4" inherits="Relic_HiButtonTemplate,Relic_24" id="4">
+    <Anchors><Anchor point="TOPRIGHT"><Offset x="-6" y="-29"/></Anchor></Anchors>
+   </Button>
+  </Frames>
+
+  <Scripts>
+   <OnLoad> 
+    for i=2,10 do 
+     local x = CreateFrame("BUTTON",self:GetName() .. "_Replay" .. i, self, "Relic_HiButtonTemplate");
+     x:SetID(i); x:Hide();
+     if i > 5 then
+      x:SetPoint("TOP", _G["Relic_View_Replay" .. (i-5)], "BOTTOM", 8, -4);
+     else
+      x:SetPoint("LEFT", _G["Relic_View_Replay" .. (i-1)], "RIGHT", 2, 0);
+     end
+    end 
+   </OnLoad>
+   <OnMouseUp> self:StopMovingOrSizing();</OnMouseUp>
+   <OnMouseDown> self:StartMoving(); </OnMouseDown>
+   <OnHide>if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); else self:GetScript("OnEvent")(); end</OnHide>
+   <OnEvent>ClearOverrideBindings(self); self:UnregisterEvent("PLAYER_REGEN_ENABLED"); </OnEvent>
+  </Scripts>
+ </Frame>
+</Ui>

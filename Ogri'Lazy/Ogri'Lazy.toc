@@ -1,0 +1,8 @@
+## Interface: 30300
+## Title: Ogri'Lazy
+## Notes: Memory span of a goldfish + Apexis Relics = No problem!
+## Version: 1.0.5
+Relic.en.lua
+Relic.de.lua
+Relic.ui.xml
+Relic.ui.lua
